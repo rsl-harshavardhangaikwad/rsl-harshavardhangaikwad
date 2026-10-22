@@ -1,0 +1,45 @@
+# ============================================================
+# Task 6: Backup and Restore Commands
+# Database: company_advanced
+# ============================================================
+
+# Step 1: Backup company_advanced to a gzip archive
+# Run this in your system terminal (NOT inside mongosh)
+
+mongodump --db=company_advanced --archive=company_advanced.archive --gzip
+
+# Expected output:
+#   writing `company_advanced.employees`   to archive
+#   writing `company_advanced.departments` to archive
+#   writing `company_advanced.sessions`    to archive
+#   done dumping employees   (4 documents)
+#   done dumping departments (2 documents)
+#   done dumping sessions    (1 document)
+
+
+# Step 2: Restore into a NEW database named company_advanced_restore
+# Run this in your system terminal (NOT inside mongosh)
+
+mongorestore --gzip --archive=company_advanced.archive --nsFrom="company_advanced.*" --nsTo="company_advanced_restore.*"
+
+# Expected output:
+#   7 document(s) restored successfully. 0 document(s) failed to restore.
+
+
+# Step 3: Verify restored collection counts
+# Run these inside mongosh
+
+use company_advanced_restore
+
+db.employees.countDocuments()
+# Expected: 4
+
+db.departments.countDocuments()
+# Expected: 2
+
+db.sessions.countDocuments()
+# Expected: 1
+
+
+# NOTE: 'use company_advanced_restore' must be run inside mongosh,
+#       not in the system terminal.
